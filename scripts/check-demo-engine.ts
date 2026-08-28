@@ -86,7 +86,7 @@ let snapshotTasks = [
     snapshot,
   ),
 ];
-snapshotSteps[2].title = 'Título alterado depois da publicação';
+snapshotSteps[2].title = 'Title changed after publication';
 snapshotTasks = startTask(snapshotTasks, 'snapshot-task');
 snapshotTasks = toggleChecklist(snapshotTasks, 'snapshot-task', 0);
 snapshotTasks = toggleChecklist(snapshotTasks, 'snapshot-task', 1);
@@ -100,7 +100,7 @@ const frozenAdvance = advanceTask({
   baseDate,
 });
 assert.equal(frozenAdvance.tasks.at(-1)?.stepId, 'pedido-aprovar');
-assert.equal(frozenAdvance.tasks.at(-1)?.title, 'Liberar preparação');
+assert.equal(frozenAdvance.tasks.at(-1)?.title, 'Approve preparation');
 
 const lockedDecisionSnapshot = {
   runId: 'run-locked-decision',

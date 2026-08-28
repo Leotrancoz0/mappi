@@ -13,7 +13,7 @@ const required = [
 ];
 
 const missing = required.filter((file) => !existsSync(join(root, file)));
-if (missing.length) throw new Error(`Arquivos obrigatórios ausentes: ${missing.join(', ')}`);
+if (missing.length) throw new Error(`Required files are missing: ${missing.join(', ')}`);
 
 const ignored = new Set(['.git', '.next', '.vinext', '.wrangler', 'dist', 'node_modules']);
 const textExtensions = new Set(['.css', '.js', '.json', '.md', '.mjs', '.svg', '.ts', '.tsx']);
@@ -33,7 +33,7 @@ const identityRules = [
   { label: 'rota administrativa', pattern: /\/admin(?:\/|\b)/iu },
   { label: 'identificador interno', pattern: /topo-hub-|hub\.topoleiloes|\/(?:mappi|flows)(?:\/|['"\s])/iu },
   { label: 'credencial', pattern: /BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY|api[_-]?key\s*[:=]|client[_-]?secret\s*[:=]/iu },
-  { label: 'endereço IP', pattern: /\b(?:\d{1,3}\.){3}\d{1,3}\b/u },
+  { label: 'IP address', pattern: /\b(?:\d{1,3}\.){3}\d{1,3}\b/u },
 ];
 
 for (const file of files) {
@@ -59,10 +59,10 @@ for (const file of files) {
 
 const png = readFileSync(join(root, 'public/og-mappi-v2.png'));
 const pngSignature = '89504e470d0a1a0a';
-if (png.subarray(0, 8).toString('hex') !== pngSignature) violations.push('public/og-mappi-v2.png: assinatura PNG inválida');
-if (png.length < 20_000) violations.push('public/og-mappi-v2.png: imagem social inesperadamente pequena');
+if (png.subarray(0, 8).toString('hex') !== pngSignature) violations.push('public/og-mappi-v2.png: invalid PNG signature');
+if (png.length < 20_000) violations.push('public/og-mappi-v2.png: social image is unexpectedly small');
 if (existsSync(join(root, 'LICENSE')) || existsSync(join(root, 'LICENSE.md'))) {
-  violations.push('LICENSE: o case proprietário não deve declarar licença open source');
+  violations.push('LICENSE: this proprietary case study must not declare an open-source license');
 }
 
 if (violations.length) {
