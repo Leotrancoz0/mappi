@@ -82,7 +82,7 @@ type CanvasData = {
   meta: string;
 };
 type CanvasNode = Node<CanvasData, 'mappiNode'>;
-type MapStatus = 'Publicado' | 'Modelo' | 'Rascunho';
+type MapStatus = 'Published' | 'Template' | 'Draft';
 type MapDocument = {
   id: string;
   name: string;
@@ -97,24 +97,24 @@ type MapDocument = {
 
 const storageKey = 'mappi-portfolio-demo-v3';
 const appLabels: Record<DemoApp, string> = {
-  none: 'Sem aplicativo',
-  forms: 'Formulários',
-  files: 'Arquivos',
-  messages: 'Mensagens',
+  none: 'No app',
+  forms: 'Forms',
+  files: 'Files',
+  messages: 'Messages',
 };
 
 const kindLabels: Record<StepKind, string> = {
-  task: 'Tarefa',
-  decision: 'Decisão',
-  approval: 'Aprovação',
-  interconnection: 'Interconexão',
+  task: 'Task',
+  decision: 'Decision',
+  approval: 'Approval',
+  interconnection: 'Interconnection',
 };
 
 const statusLabels: Record<TaskStatus, string> = {
-  todo: 'A fazer',
-  doing: 'Em andamento',
-  review: 'Em revisão',
-  done: 'Concluídas',
+  todo: 'To do',
+  doing: 'In progress',
+  review: 'In review',
+  done: 'Completed',
 };
 
 const statusOrder: TaskStatus[] = ['todo', 'doing', 'review', 'done'];
@@ -148,43 +148,43 @@ function moveToStatusEnd(tasks: DemoTask[], taskId: string, status: TaskStatus):
 }
 
 const navItems: Array<{ id: View; label: string; icon: LucideIcon }> = [
-  { id: 'home', label: 'Início', icon: LayoutDashboard },
-  { id: 'maps', label: 'Mapas', icon: Map },
-  { id: 'tasks', label: 'Tarefas', icon: ListTodo },
-  { id: 'agenda', label: 'Agenda', icon: CalendarDays },
-  { id: 'apps', label: 'Aplicativos', icon: Blocks },
+  { id: 'home', label: 'Home', icon: LayoutDashboard },
+  { id: 'maps', label: 'Maps', icon: Map },
+  { id: 'tasks', label: 'Tasks', icon: ListTodo },
+  { id: 'agenda', label: 'Calendar', icon: CalendarDays },
+  { id: 'apps', label: 'Apps', icon: Blocks },
 ];
 
 const initialMapMetadata: Array<Omit<MapDocument, 'steps' | 'nodes' | 'edges'>> = [
   {
     id: 'pedido',
-    name: 'Aprovar novo pedido',
-    description: 'Da solicitação à preparação, com decisão e aprovação.',
-    status: 'Publicado',
+    name: 'Approve new order',
+    description: 'From request to preparation, with a decision and approval.',
+    status: 'Published',
     executions: 12,
     color: '#1b7f70',
   },
   {
     id: 'cliente',
-    name: 'Receber novo cliente',
-    description: 'Organiza informações, valida atendimento e reúne arquivos.',
-    status: 'Publicado',
+    name: 'Onboard new client',
+    description: 'Organizes information, approves service, and gathers files.',
+    status: 'Published',
     executions: 7,
     color: '#3977c5',
   },
   {
     id: 'conteudo',
-    name: 'Publicar novo conteúdo',
-    description: 'Preparo, revisão de prontidão e aprovação final.',
-    status: 'Modelo',
+    name: 'Publish new content',
+    description: 'Preparation, readiness review, and final approval.',
+    status: 'Template',
     executions: 0,
     color: '#8f6cb4',
   },
   {
     id: 'compras',
-    name: 'Solicitação de compras',
-    description: 'Mapa em construção para pedidos internos.',
-    status: 'Rascunho',
+    name: 'Purchase request',
+    description: 'A draft workflow for internal requests.',
+    status: 'Draft',
     executions: 0,
     color: '#c37732',
   },
@@ -196,14 +196,14 @@ function makeSeedTasks(): DemoTask[] {
       id: 'seed-doing',
       stepId: 'pedido-conferir',
       stepIndex: 0,
-      flowName: 'Aprovar novo pedido',
-      title: 'Conferir solicitação',
+      flowName: 'Approve new order',
+      title: 'Review request',
       kind: 'task',
       app: 'forms',
       status: 'doing',
       checklist: [
-        { label: 'Dados essenciais conferidos', done: true },
-        { label: 'Prazo confirmado', done: false },
+        { label: 'Essential details reviewed', done: true },
+        { label: 'Deadline confirmed', done: false },
       ],
       due: '2026-08-28T12:00:00-03:00',
     },
@@ -211,14 +211,14 @@ function makeSeedTasks(): DemoTask[] {
       id: 'seed-review',
       stepId: 'conteudo-criar',
       stepIndex: 0,
-      flowName: 'Publicar novo conteúdo',
-      title: 'Preparar conteúdo',
+      flowName: 'Publish new content',
+      title: 'Prepare content',
       kind: 'task',
       app: 'files',
       status: 'review',
       checklist: [
-        { label: 'Texto revisado', done: true },
-        { label: 'Imagem selecionada', done: true },
+        { label: 'Copy reviewed', done: true },
+        { label: 'Image selected', done: true },
       ],
       due: '2026-08-29T12:00:00-03:00',
     },
@@ -226,26 +226,26 @@ function makeSeedTasks(): DemoTask[] {
       id: 'seed-todo',
       stepId: 'cliente-aprovar',
       stepIndex: 1,
-      flowName: 'Receber novo cliente',
-      title: 'Validar atendimento',
+      flowName: 'Onboard new client',
+      title: 'Approve service plan',
       kind: 'approval',
       app: 'messages',
       status: 'todo',
-      checklist: [{ label: 'Escopo confirmado', done: false }],
+      checklist: [{ label: 'Scope confirmed', done: false }],
       due: '2026-09-01T12:00:00-03:00',
     },
     {
       id: 'seed-done',
       stepId: 'cliente-receber',
       stepIndex: 0,
-      flowName: 'Receber novo cliente',
-      title: 'Receber informações',
+      flowName: 'Onboard new client',
+      title: 'Collect information',
       kind: 'task',
       app: 'forms',
       status: 'done',
       checklist: [
-        { label: 'Contato validado', done: true },
-        { label: 'Objetivo registrado', done: true },
+        { label: 'Contact validated', done: true },
+        { label: 'Goal recorded', done: true },
       ],
       due: '2026-08-26T12:00:00-03:00',
       outcome: 'approve',
@@ -259,7 +259,7 @@ function buildCanvasNodes(steps: FlowStep[]): CanvasNode[] {
       id: 'start',
       type: 'mappiNode',
       position: { x: 70, y: 250 },
-      data: { label: 'Início', kind: 'start', meta: 'Gatilho manual' },
+      data: { label: 'Start', kind: 'start', meta: 'Manual trigger' },
       draggable: false,
     },
   ];
@@ -286,7 +286,7 @@ function buildCanvasNodes(steps: FlowStep[]): CanvasNode[] {
     id: 'end',
     type: 'mappiNode',
     position: { x: 310 + steps.length * 285, y: 250 },
-    data: { label: 'Fim', kind: 'end', meta: 'Execução concluída' },
+    data: { label: 'End', kind: 'end', meta: 'Run complete' },
     draggable: false,
   });
 
@@ -304,7 +304,7 @@ function makeCanvasEdge(
     source,
     target,
     type: 'smoothstep',
-    ...(adjustment ? { label: 'ajustar' } : {}),
+    ...(adjustment ? { label: 'adjust' } : {}),
     markerEnd: {
       type: MarkerType.ArrowClosed,
       color: adjustment ? '#b9783d' : '#a8aaa9',
@@ -358,9 +358,9 @@ function makeInitialMapDocuments(): MapDocument[] {
           {
             id: 'compras-registrar',
             kind: 'task' as const,
-            title: 'Registrar solicitação',
+            title: 'Record request',
             app: 'forms' as const,
-            checklist: ['Informações essenciais conferidas'],
+            checklist: ['Essential information reviewed'],
           },
         ];
     return {
@@ -402,7 +402,7 @@ function graphIsExecutable(steps: FlowStep[], edges: Edge[]) {
 }
 
 function formatDate(value: string, options?: Intl.DateTimeFormatOptions) {
-  return new Intl.DateTimeFormat('pt-BR', options ?? { day: '2-digit', month: 'short' }).format(
+  return new Intl.DateTimeFormat('en-US', options ?? { day: '2-digit', month: 'short' }).format(
     new Date(value),
   );
 }
@@ -638,7 +638,7 @@ export default function MappiPortfolio() {
             ? {
                 ...document,
                 name: mapName,
-                status: published ? 'Publicado' : 'Rascunho',
+                status: published ? 'Published' : 'Draft',
                 steps: cloneTemplate({
                   id: currentMapId,
                   label: mapName,
@@ -701,7 +701,7 @@ export default function MappiPortfolio() {
           ? {
               ...document,
               name: mapName,
-              status: published ? 'Publicado' : 'Rascunho',
+              status: published ? 'Published' : 'Draft',
               steps: cloneTemplate({
                 id: currentMapId,
                 label: mapName,
@@ -746,7 +746,7 @@ export default function MappiPortfolio() {
     }));
     setNodes(cloneNodes(document.nodes));
     setEdges(cloneEdges(document.edges));
-    setPublished(document.status === 'Publicado');
+    setPublished(document.status === 'Published');
     setSelectedStepId(null);
     setView('maps');
     setEditorOpen(true);
@@ -759,7 +759,7 @@ export default function MappiPortfolio() {
     const starter: FlowStep = {
       id: 'step-' + window.crypto.randomUUID(),
       kind: 'task',
-      title: 'Primeira tarefa',
+      title: 'First task',
       app: 'none',
       checklist: [],
     };
@@ -769,8 +769,8 @@ export default function MappiPortfolio() {
     const document: MapDocument = {
       id,
       name,
-      description: 'Novo processo criado nesta demonstração.',
-      status: 'Rascunho',
+      description: 'New process created in this demo.',
+      status: 'Draft',
       executions: 0,
       color: '#1b7f70',
       steps: [starter],
@@ -789,7 +789,7 @@ export default function MappiPortfolio() {
     setNewMapOpen(false);
     setEditorOpen(true);
     pushLocation('maps', true);
-    notify('Rascunho criado. Agora desenhe o caminho.');
+    notify('Draft created. Now design the path.');
   };
 
   const startMapExecution = ({
@@ -825,13 +825,13 @@ export default function MappiPortfolio() {
     setEditorOpen(false);
     setNewTaskOpen(false);
     pushLocation('tasks');
-    notify('Execução iniciada: a primeira tarefa foi criada.');
+    notify('Run started: the first task was created.');
   };
 
   const createTaskFromMap = () => {
-    const document = maps.find((item) => item.id === newTaskMapId && item.status === 'Publicado');
+    const document = maps.find((item) => item.id === newTaskMapId && item.status === 'Published');
     if (!document || !graphIsExecutable(document.steps, document.edges)) {
-      notify('Escolha um mapa publicado e pronto para executar.');
+      notify('Choose a published map that is ready to run.');
       return;
     }
     startMapExecution({
@@ -844,10 +844,10 @@ export default function MappiPortfolio() {
 
   const addStep = (kind: StepKind) => {
     const defaults: Record<StepKind, string> = {
-      task: 'Nova tarefa',
-      decision: 'Tomar uma decisão',
-      approval: 'Solicitar aprovação',
-      interconnection: 'Referenciar outro mapa',
+      task: 'New task',
+      decision: 'Make a decision',
+      approval: 'Request approval',
+      interconnection: 'Reference another map',
     };
     const step: FlowStep = {
       id: 'step-' + window.crypto.randomUUID(),
@@ -946,12 +946,12 @@ export default function MappiPortfolio() {
   const publishOrRun = () => {
     if (!published) {
       if (!graphValid) {
-        notify('Conecte todas as etapas ao caminho entre Início e Fim.');
+        notify('Connect every step to the path between Start and End.');
         return;
       }
       setPublished(true);
-      saveCurrentMap({ status: 'Publicado' });
-      notify('Mapa publicado e pronto para executar.');
+      saveCurrentMap({ status: 'Published' });
+      notify('Map published and ready to run.');
       return;
     }
     startMapExecution({
@@ -975,11 +975,11 @@ export default function MappiPortfolio() {
   const reviewSelectedTask = () => {
     if (!selectedTask) return;
     if (!canSendToReview(selectedTask)) {
-      notify('Conclua a lista antes de enviar para revisão.');
+      notify('Complete the checklist before sending for review.');
       return;
     }
     setTasks((current) => sendTaskToReview(current, selectedTask.id));
-    notify('Tarefa enviada para revisão.');
+    notify('Task sent for review.');
   };
 
   const finishSelectedTask = (outcome: DecisionOutcome = 'approve') => {
@@ -1011,10 +1011,10 @@ export default function MappiPortfolio() {
     if (nextTask) setCalendarFocus(nextTask.due);
     notify(
       result.complete
-        ? 'Execução concluída.'
+        ? 'Run complete.'
         : outcome === 'adjust'
-          ? 'Ajuste criado antes de seguir.'
-          : 'Próxima tarefa criada automaticamente.',
+          ? 'Adjustment task created before continuing.'
+          : 'Next task created automatically.',
     );
   };
 
@@ -1022,7 +1022,7 @@ export default function MappiPortfolio() {
     if (!draggedMapId || draggedMapId === targetId) return;
     setMaps((current) => moveBefore(current, draggedMapId, targetId));
     setDraggedMapId(null);
-    notify('Ordem dos mapas atualizada.');
+    notify('Map order updated.');
   };
 
   const moveTask = (taskId: string, targetStatus: TaskStatus, targetId?: string) => {
@@ -1036,35 +1036,35 @@ export default function MappiPortfolio() {
       return;
     }
     if (task.status === 'done') {
-      notify('Etapas concluídas permanecem no histórico da execução.');
+      notify('Completed steps remain in the run history.');
       return;
     }
     if (targetStatus === 'todo') {
       setTasks((current) => moveToStatusEnd(current, taskId, 'todo'));
-      notify('Tarefa movida para A fazer.');
+      notify('Task moved to To do.');
       return;
     }
     if (targetStatus === 'doing') {
       setTasks((current) => moveToStatusEnd(current, taskId, 'doing'));
-      notify('Tarefa movida para Em andamento.');
+      notify('Task moved to In progress.');
       return;
     }
     if (targetStatus === 'review') {
       if (task.status !== 'doing' || !canSendToReview(task)) {
-        notify('Conclua a lista antes de enviar para revisão.');
+        notify('Complete the checklist before sending for review.');
         return;
       }
       setTasks((current) => moveToStatusEnd(current, taskId, 'review'));
-      notify('Tarefa enviada para revisão.');
+      notify('Task sent for review.');
       return;
     }
     if (task.status !== 'review') {
-      notify('A tarefa precisa passar pela revisão antes de ser concluída.');
+      notify('The task must pass review before completion.');
       return;
     }
     if (task.kind === 'decision') {
       setSelectedTaskId(task.id);
-      notify('Abra a decisão para escolher o caminho do mapa.');
+      notify('Open the decision to choose the workflow path.');
       return;
     }
 
@@ -1089,7 +1089,7 @@ export default function MappiPortfolio() {
       ? result.tasks.find((item) => item.id === result.nextTaskId)
       : undefined;
     if (nextTask) setCalendarFocus(nextTask.due);
-    notify(result.complete ? 'Execução concluída.' : 'Próxima tarefa criada automaticamente.');
+    notify(result.complete ? 'Run complete.' : 'Next task created automatically.');
   };
 
   const beginMapDrag = (event: DragEvent<HTMLButtonElement>, mapId: string) => {
@@ -1131,7 +1131,7 @@ export default function MappiPortfolio() {
     setView('home');
     pushLocation('home');
     window.localStorage.removeItem(storageKey);
-    notify('Demonstração restaurada.');
+    notify('Demo restored.');
   };
 
   const filteredMaps = maps.filter((mapItem) =>
@@ -1146,10 +1146,10 @@ export default function MappiPortfolio() {
     (counts, status) => ({ ...counts, [status]: tasks.filter((task) => task.status === status).length }),
     {} as Record<TaskStatus, number>,
   );
-  const publishedMapCount = maps.filter((document) => document.status === 'Publicado').length;
-  const publishedMaps = maps.filter((document) => document.status === 'Publicado');
+  const publishedMapCount = maps.filter((document) => document.status === 'Published').length;
+  const publishedMaps = maps.filter((document) => document.status === 'Published');
   const executionCount = maps.reduce((total, document) => total + document.executions, 0);
-  const focusDateLabel = new Intl.DateTimeFormat('pt-BR', {
+  const focusDateLabel = new Intl.DateTimeFormat('en-US', {
     weekday: 'long',
     day: 'numeric',
     month: 'long',
@@ -1165,8 +1165,8 @@ export default function MappiPortfolio() {
       <div className="product-page home-page">
         <SectionHeader
           eyebrow={focusDateLabel.charAt(0).toUpperCase() + focusDateLabel.slice(1)}
-          title="Bom trabalho, Marina."
-          description="Aqui está o que pede atenção agora."
+          title="Good work, Marina."
+          description="Here is what needs your attention now."
           action={
             <button
               className="icon-button"
@@ -1176,7 +1176,7 @@ export default function MappiPortfolio() {
                 setView('tasks');
                 pushLocation('tasks');
               }}
-              aria-label={taskCounts.review + ' tarefas aguardando revisão'}
+              aria-label={taskCounts.review + ' tasks awaiting review'}
             >
               <Bell size={18} />
               {taskCounts.review > 0 && <span className="notification-dot" />}
@@ -1184,29 +1184,29 @@ export default function MappiPortfolio() {
           }
         />
 
-        <section className="home-stats" aria-label="Resumo">
+        <section className="home-stats" aria-label="Summary">
           <article>
             <span className="stat-icon is-green"><ListTodo size={18} /></span>
-            <div><strong>{taskCounts.todo + taskCounts.doing}</strong><span>Tarefas em aberto</span></div>
-            <small>{tasksOnFocus} na data em foco</small>
+            <div><strong>{taskCounts.todo + taskCounts.doing}</strong><span>Open tasks</span></div>
+            <small>{tasksOnFocus} on the selected date</small>
           </article>
           <article>
             <span className="stat-icon is-blue"><Workflow size={18} /></span>
-            <div><strong>{publishedMapCount}</strong><span>Mapas publicados</span></div>
-            <small>{executionCount} execuções</small>
+            <div><strong>{publishedMapCount}</strong><span>Published maps</span></div>
+            <small>{executionCount} runs</small>
           </article>
           <article>
             <span className="stat-icon is-amber"><ShieldCheck size={18} /></span>
-            <div><strong>{taskCounts.review}</strong><span>Aguardando revisão</span></div>
-            <small>Sem atrasos</small>
+            <div><strong>{taskCounts.review}</strong><span>Awaiting review</span></div>
+            <small>No delays</small>
           </article>
         </section>
 
         <div className="home-grid">
           <section className="surface focus-list">
             <div className="surface-heading">
-              <div><h2>Próximas tarefas</h2><p>Ordenadas por prazo</p></div>
-              <button className="text-button" onClick={() => navigate('tasks')}>Ver todas <ArrowRight size={14} /></button>
+              <div><h2>Upcoming tasks</h2><p>Sorted by due date</p></div>
+              <button className="text-button" onClick={() => navigate('tasks')}>View all <ArrowRight size={14} /></button>
             </div>
             <div className="compact-task-list">
               {focusTasks.map((task) => (
@@ -1234,7 +1234,7 @@ export default function MappiPortfolio() {
           <aside className="home-aside">
             <section className="surface quick-map">
               <div className="surface-heading">
-                <div><h2>Mapa em foco</h2><p>Mais executado esta semana</p></div>
+                <div><h2>Focus map</h2><p>Most run this week</p></div>
               </div>
               <div className="mini-flow" aria-hidden="true">
                 <span className="mini-node start" />
@@ -1246,22 +1246,22 @@ export default function MappiPortfolio() {
                 <span className="mini-node task" />
               </div>
               <h3>{focusMap.name}</h3>
-              <p>{focusMap.executions} execuções · 83% concluídas no prazo</p>
+              <p>{focusMap.executions} runs · 83% completed on time</p>
               <button className="secondary-button full" onClick={() => openMap(focusMap.id)}>
-                Abrir mapa <ArrowRight size={15} />
+                Open map <ArrowRight size={15} />
               </button>
             </section>
 
             <section className="surface connected-summary">
               <div className="surface-heading">
-                <div><h2>Aplicativos</h2><p>{connectedApps.length} conectados</p></div>
-                <button className="text-button" onClick={() => navigate('apps')}>Gerenciar</button>
+                <div><h2>Apps</h2><p>{connectedApps.length} connected</p></div>
+                <button className="text-button" onClick={() => navigate('apps')}>Manage</button>
               </div>
               <div className="app-stack">
-                {connectedApps.includes('forms') && <span><FileText size={16} /> Formulários</span>}
-                {connectedApps.includes('files') && <span><Folder size={16} /> Arquivos</span>}
-                {connectedApps.includes('messages') && <span><MessageSquare size={16} /> Mensagens</span>}
-                {connectedApps.length === 0 && <span>Nenhum aplicativo conectado</span>}
+                {connectedApps.includes('forms') && <span><FileText size={16} /> Forms</span>}
+                {connectedApps.includes('files') && <span><Folder size={16} /> Files</span>}
+                {connectedApps.includes('messages') && <span><MessageSquare size={16} /> Messages</span>}
+                {connectedApps.length === 0 && <span>No apps connected</span>}
               </div>
             </section>
           </aside>
@@ -1273,13 +1273,13 @@ export default function MappiPortfolio() {
   const renderMapLibrary = () => (
     <div className="product-page maps-page">
       <SectionHeader
-        eyebrow="Operação"
-        title="Mapas"
-        description="Desenhe uma vez. O Mappi conduz o trabalho a cada execução."
+        eyebrow="Operations"
+        title="Maps"
+        description="Design once. Mappi guides the work on every run."
         action={
           <button className="primary-button" onClick={() => setNewMapOpen((open) => !open)}>
             {newMapOpen ? <X size={16} /> : <Plus size={16} />}
-            {newMapOpen ? 'Cancelar' : 'Novo mapa'}
+            {newMapOpen ? 'Cancel' : 'New map'}
           </button>
         }
       />
@@ -1288,52 +1288,52 @@ export default function MappiPortfolio() {
         <section className="new-map-composer">
           <AppMark compact />
           <div>
-            <strong>Como este processo deve se chamar?</strong>
-            <span>Você pode ajustar tudo depois.</span>
+            <strong>What should this process be called?</strong>
+            <span>You can adjust everything later.</span>
           </div>
           <input
             autoFocus
             value={newMapName}
             onChange={(event) => setNewMapName(event.target.value)}
             onKeyDown={(event) => event.key === 'Enter' && createBlankMap()}
-            placeholder="Ex.: Aprovar reembolso"
-            aria-label="Nome do novo mapa"
+            placeholder="For example: Approve refund"
+            aria-label="New map name"
           />
           <button className="primary-button" disabled={!newMapName.trim()} onClick={createBlankMap}>
-            Criar
+            Create
           </button>
         </section>
       )}
 
       <section className="map-command">
-        <div><span>{executionCount}</span><small>execuções registradas</small></div>
-        <div><span>86%</span><small>concluídas no prazo</small></div>
-        <div><span>1,8 dia</span><small>tempo médio</small></div>
-        <div><span>{publishedMapCount}</span><small>mapas publicados</small></div>
+        <div><span>{executionCount}</span><small>recorded runs</small></div>
+        <div><span>86%</span><small>completed on time</small></div>
+        <div><span>1.8 days</span><small>average time</small></div>
+        <div><span>{publishedMapCount}</span><small>published maps</small></div>
       </section>
 
       <section className="surface running-section">
         <div className="surface-heading">
-          <div><h2>Em execução</h2><p>Processos ativos neste momento</p></div>
-          <button className="text-button" onClick={() => navigate('tasks')}>Acompanhar tarefas <ArrowRight size={14} /></button>
+          <div><h2>Running</h2><p>Active processes right now</p></div>
+          <button className="text-button" onClick={() => navigate('tasks')}>Track tasks <ArrowRight size={14} /></button>
         </div>
         <div className="running-row">
           <div className="running-icon"><Workflow size={18} /></div>
-          <div><strong>Aprovar novo pedido</strong><span>Execução #018 · 2 de 4 etapas</span></div>
+          <div><strong>Approve new order</strong><span>Run #018 · 2 of 4 steps</span></div>
           <div className="progress-track"><i style={{ width: '50%' }} /></div>
           <span className="running-owner"><span className="avatar tiny">MC</span> Marina</span>
-          <button className="secondary-button compact" onClick={() => navigate('tasks')}>Abrir</button>
+          <button className="secondary-button compact" onClick={() => navigate('tasks')}>Open</button>
         </div>
       </section>
 
       <div className="library-toolbar">
         <div>
-          <h2>Biblioteca</h2>
-          <span>{filteredMaps.length} mapas</span>
+          <h2>Library</h2>
+          <span>{filteredMaps.length} maps</span>
         </div>
         <label className="search-field">
           <Search size={16} />
-          <input value={mapSearch} onChange={(event) => setMapSearch(event.target.value)} placeholder="Buscar mapas" />
+          <input value={mapSearch} onChange={(event) => setMapSearch(event.target.value)} placeholder="Search maps" />
         </label>
       </div>
 
@@ -1349,7 +1349,7 @@ export default function MappiPortfolio() {
           if (!draggedMapId) return;
           setMaps((current) => moveToEnd(current, draggedMapId));
           setDraggedMapId(null);
-          notify('Ordem dos mapas atualizada.');
+          notify('Map order updated.');
         }}
       >
         {filteredMaps.map((mapItem) => (
@@ -1369,7 +1369,7 @@ export default function MappiPortfolio() {
             }}
             onDragEnd={() => setDraggedMapId(null)}
             onClick={() => openMap(mapItem.id)}
-            title="Arraste para reorganizar ou clique para abrir"
+            title="Drag to reorder or click to open"
           >
             <span className="map-card-accent" style={{ '--map-color': mapItem.color } as CSSProperties} />
             <div className="map-card-top">
@@ -1379,7 +1379,7 @@ export default function MappiPortfolio() {
             <h3>{mapItem.name}</h3>
             <p>{mapItem.description}</p>
             <div className="map-card-bottom">
-              <span>{mapItem.executions ? mapItem.executions + ' execuções' : 'Ainda não executado'}</span>
+              <span>{mapItem.executions ? mapItem.executions + ' runs' : 'Not run yet'}</span>
               <ArrowRight size={16} />
             </div>
           </button>
@@ -1392,7 +1392,7 @@ export default function MappiPortfolio() {
     <div className="editor-shell">
       <header className="editor-topbar">
         <div className="editor-title">
-          <button className="icon-button subtle" onClick={closeEditor} aria-label="Voltar à biblioteca">
+          <button className="icon-button subtle" onClick={closeEditor} aria-label="Back to library">
             <ArrowLeft size={18} />
           </button>
           <div>
@@ -1402,15 +1402,15 @@ export default function MappiPortfolio() {
                 setMapName(event.target.value);
                 setPublished(false);
               }}
-              aria-label="Nome do mapa"
+              aria-label="Map name"
             />
-            <span><i className={published ? 'published-dot' : 'draft-dot'} />{published ? 'Publicado' : 'Alterações não publicadas'}</span>
+            <span><i className={published ? 'published-dot' : 'draft-dot'} />{published ? 'Published' : 'Unpublished changes'}</span>
           </div>
         </div>
         <div className="editor-actions">
           <button className="primary-button" onClick={publishOrRun}>
             {published ? <Play size={16} fill="currentColor" /> : <UploadCloud size={16} />}
-            {published ? 'Iniciar execução' : 'Publicar mapa'}
+            {published ? 'Start run' : 'Publish map'}
           </button>
         </div>
       </header>
@@ -1418,16 +1418,16 @@ export default function MappiPortfolio() {
       <div className="editor-layout">
         <aside className="operation-palette">
           <div>
-            <p className="palette-label">Etapas</p>
-            <span>Adicione e organize no mapa.</span>
+            <p className="palette-label">Steps</p>
+            <span>Add and arrange them on the map.</span>
           </div>
-          <button onClick={() => addStep('task')}><span className="palette-icon task"><CheckCircle2 size={16} /></span><span><strong>Tarefa</strong><small>Trabalho a realizar</small></span><Plus size={14} /></button>
-          <button onClick={() => addStep('decision')}><span className="palette-icon decision"><GitBranch size={16} /></span><span><strong>Decisão</strong><small>Cria dois caminhos</small></span><Plus size={14} /></button>
-          <button onClick={() => addStep('approval')}><span className="palette-icon approval"><ShieldCheck size={16} /></span><span><strong>Aprovação</strong><small>Validação responsável</small></span><Plus size={14} /></button>
-          <button onClick={() => addStep('interconnection')}><span className="palette-icon interconnection"><Link2 size={16} /></span><span><strong>Interconexão</strong><small>Referencia outro mapa</small></span><Plus size={14} /></button>
+          <button onClick={() => addStep('task')}><span className="palette-icon task"><CheckCircle2 size={16} /></span><span><strong>Task</strong><small>Work to be done</small></span><Plus size={14} /></button>
+          <button onClick={() => addStep('decision')}><span className="palette-icon decision"><GitBranch size={16} /></span><span><strong>Decision</strong><small>Creates two paths</small></span><Plus size={14} /></button>
+          <button onClick={() => addStep('approval')}><span className="palette-icon approval"><ShieldCheck size={16} /></span><span><strong>Approval</strong><small>Owner validation</small></span><Plus size={14} /></button>
+          <button onClick={() => addStep('interconnection')}><span className="palette-icon interconnection"><Link2 size={16} /></span><span><strong>Interconnection</strong><small>References another map</small></span><Plus size={14} /></button>
           <div className="palette-tip">
             <Sparkles size={15} />
-            <p><strong>Teste este mapa</strong><span>Publique e inicie uma execução. A primeira tarefa aparecerá no quadro.</span></p>
+            <p><strong>Test this map</strong><span>Publish and start a run. The first task will appear on the board.</span></p>
           </div>
         </aside>
 
@@ -1449,14 +1449,13 @@ export default function MappiPortfolio() {
             fitViewOptions={{ padding: 0.22 }}
             minZoom={0.45}
             maxZoom={1.4}
-            proOptions={{ hideAttribution: true }}
           >
             <Background color="#d8dad9" gap={24} size={1} />
             <Controls showInteractive={false} position="bottom-left" />
           </ReactFlow>
           <div className="canvas-legend">
-            <span><Link2 size={11} /> arraste entre os pontos para conectar</span>
-            <span><i className="line-dashed" /> retorna para ajuste</span>
+            <span><Link2 size={11} /> drag between handles to connect</span>
+            <span><i className="line-dashed" /> returns for adjustment</span>
           </div>
         </main>
 
@@ -1466,15 +1465,15 @@ export default function MappiPortfolio() {
               <div className="inspector-heading">
                 <div><span className={'palette-icon ' + selectedStep.kind}>
                   {selectedStep.kind === 'decision' ? <GitBranch size={16} /> : selectedStep.kind === 'approval' ? <ShieldCheck size={16} /> : selectedStep.kind === 'interconnection' ? <Link2 size={16} /> : <CheckCircle2 size={16} />}
-                </span><div><p>Etapa selecionada</p><strong>{kindLabels[selectedStep.kind]}</strong></div></div>
-                <button className="icon-button subtle" onClick={() => setSelectedStepId(null)} aria-label="Fechar detalhes"><X size={16} /></button>
+                </span><div><p>Selected step</p><strong>{kindLabels[selectedStep.kind]}</strong></div></div>
+                <button className="icon-button subtle" onClick={() => setSelectedStepId(null)} aria-label="Close details"><X size={16} /></button>
               </div>
               <label className="field-label">
-                Nome
+                Name
                 <input value={selectedStep.title} onChange={(event) => updateStep({ title: event.target.value })} />
               </label>
               <label className="field-label">
-                Tipo
+                Type
                 <select
                   value={selectedStep.kind}
                   onChange={(event) => {
@@ -1492,9 +1491,9 @@ export default function MappiPortfolio() {
               </label>
               {selectedStep.kind === 'interconnection' ? (
                 <label className="field-label">
-                  Mapa relacionado
+                  Related map
                   <select value={selectedStep.targetMap ?? ''} onChange={(event) => updateStep({ targetMap: event.target.value })}>
-                    <option value="">Selecione um mapa</option>
+                    <option value="">Select a map</option>
                     {maps.filter((document) => document.id !== currentMapId).map((document) => (
                       <option value={document.name} key={document.id}>{document.name}</option>
                     ))}
@@ -1502,39 +1501,39 @@ export default function MappiPortfolio() {
                 </label>
               ) : (
                 <label className="field-label">
-                  Aplicativo
+                  App
                   <select value={selectedStep.app} onChange={(event) => updateStep({ app: event.target.value as DemoApp })}>
                     {Object.entries(appLabels).map(([value, label]) => <option value={value} key={value}>{label}</option>)}
                   </select>
                 </label>
               )}
               <label className="field-label">
-                Lista de conclusão
+                Completion checklist
                 <textarea
                   value={selectedStep.checklist.join('\n')}
                   onChange={(event) => updateStep({ checklist: event.target.value.split('\n').filter(Boolean) })}
-                  placeholder="Uma verificação por linha"
+                  placeholder="One check per line"
                   rows={5}
                 />
               </label>
               <div className="inspector-note">
                 <Zap size={15} />
                 <p>
-                  <strong>O que acontece?</strong>
+                  <strong>What happens?</strong>
                   <span>
                     {selectedStep.kind === 'interconnection'
-                      ? 'A tarefa mantém a referência ao mapa relacionado, sem iniciar outra execução automaticamente.'
-                      : 'Ao chegar aqui, o Mappi cria uma tarefa com prazo e acompanha a conclusão.'}
+                      ? 'The task keeps a reference to the related map without starting another run automatically.'
+                      : 'When this step is reached, Mappi creates a task with a deadline and tracks its completion.'}
                   </span>
                 </p>
               </div>
-              <button className="danger-text-button" disabled={steps.length === 1} onClick={removeStep}>Remover etapa</button>
+              <button className="danger-text-button" disabled={steps.length === 1} onClick={removeStep}>Remove step</button>
             </>
           ) : (
             <div className="inspector-empty">
               <Settings2 size={22} />
-              <strong>Detalhes da etapa</strong>
-              <p>Selecione uma etapa do mapa para configurar o trabalho gerado.</p>
+              <strong>Step details</strong>
+              <p>Select a map step to configure the work it generates.</p>
             </div>
           )}
         </aside>
@@ -1545,14 +1544,14 @@ export default function MappiPortfolio() {
   const renderTasks = () => (
     <div className="product-page tasks-page">
       <SectionHeader
-        eyebrow="Execução"
-        title="Tarefas"
-        description="O trabalho nasce dos mapas e avança em um só lugar."
+        eyebrow="Execution"
+        title="Tasks"
+        description="Work starts in maps and moves forward in one place."
         action={
           <div className="task-header-actions">
             <label className="search-field task-search">
               <Search size={16} />
-              <input value={taskSearch} onChange={(event) => setTaskSearch(event.target.value)} placeholder="Buscar tarefas" />
+              <input value={taskSearch} onChange={(event) => setTaskSearch(event.target.value)} placeholder="Search tasks" />
             </label>
             <button
               className="primary-button"
@@ -1564,7 +1563,7 @@ export default function MappiPortfolio() {
               }}
             >
               {newTaskOpen ? <X size={16} /> : <Plus size={16} />}
-              {newTaskOpen ? 'Cancelar' : 'Nova tarefa'}
+              {newTaskOpen ? 'Cancel' : 'New task'}
             </button>
           </div>
         }
@@ -1574,28 +1573,28 @@ export default function MappiPortfolio() {
         <section className="new-map-composer new-task-composer">
           <span className="composer-icon"><ListTodo size={17} /></span>
           <div>
-            <strong>De qual mapa esta tarefa deve nascer?</strong>
-            <span>O Mappi inicia a execução pela primeira etapa publicada.</span>
+            <strong>Which map should create this task?</strong>
+            <span>Mappi starts the run from the first published step.</span>
           </div>
           <select
             autoFocus
             value={newTaskMapId}
             onChange={(event) => setNewTaskMapId(event.target.value)}
-            aria-label="Mapa da nova tarefa"
+            aria-label="New task map"
           >
             {publishedMaps.map((document) => (
               <option value={document.id} key={document.id}>{document.name}</option>
             ))}
           </select>
           <button className="primary-button" disabled={!newTaskMapId} onClick={createTaskFromMap}>
-            Criar tarefa
+            Create task
           </button>
         </section>
       )}
 
       <section className="board-summary">
-        <span><Users size={16} /> Meu quadro</span>
-        <div><span className="avatar tiny">MC</span><span className="avatar tiny secondary">RL</span><small>2 pessoas</small></div>
+        <span><Users size={16} /> My board</span>
+        <div><span className="avatar tiny">MC</span><span className="avatar tiny secondary">RL</span><small>2 people</small></div>
       </section>
 
       <section className="kanban-board">
@@ -1641,7 +1640,7 @@ export default function MappiPortfolio() {
                   }}
                   onDragEnd={finishTaskDrag}
                   onClick={() => setSelectedTaskId(task.id)}
-                  title="Arraste para mover ou clique para abrir"
+                  title="Drag to move or click to open"
                 >
                   <span className={'task-kind is-' + task.kind}>{kindLabels[task.kind]}</span>
                   <h3>{task.title}</h3>
@@ -1658,7 +1657,7 @@ export default function MappiPortfolio() {
                   </footer>
                 </button>
               ))}
-              {!filteredTasks.some((task) => task.status === status) && <div className="empty-column">Nenhuma tarefa</div>}
+              {!filteredTasks.some((task) => task.status === status) && <div className="empty-column">No tasks</div>}
             </div>
           </div>
         ))}
@@ -1666,10 +1665,10 @@ export default function MappiPortfolio() {
 
       {selectedTask && (
         <div className="drawer-backdrop" onMouseDown={(event) => event.target === event.currentTarget && setSelectedTaskId(null)}>
-          <aside className="task-drawer" role="dialog" aria-modal="true" aria-label="Detalhes da tarefa">
+          <aside className="task-drawer" role="dialog" aria-modal="true" aria-label="Task details">
             <header>
               <span className={'task-kind is-' + selectedTask.kind}>{kindLabels[selectedTask.kind]}</span>
-              <button className="icon-button subtle" onClick={() => setSelectedTaskId(null)} aria-label="Fechar"><X size={18} /></button>
+              <button className="icon-button subtle" onClick={() => setSelectedTaskId(null)} aria-label="Close"><X size={18} /></button>
             </header>
             <div className="drawer-title">
               <h2>{selectedTask.title}</h2>
@@ -1677,13 +1676,13 @@ export default function MappiPortfolio() {
             </div>
             <div className="drawer-meta">
               <div><span>Status</span><strong><StatusDot status={selectedTask.status} />{statusLabels[selectedTask.status]}</strong></div>
-              <div><span>Prazo</span><strong><CalendarDays size={15} />{formatDate(selectedTask.due, { day: '2-digit', month: 'long' })}</strong></div>
-              <div><span>Responsável</span><strong><span className="avatar tiny">MC</span>Marina Costa</strong></div>
-              {selectedTask.app !== 'none' && <div><span>Aplicativo</span><strong><Blocks size={15} />{appLabels[selectedTask.app]}</strong></div>}
+              <div><span>Due date</span><strong><CalendarDays size={15} />{formatDate(selectedTask.due, { day: '2-digit', month: 'long' })}</strong></div>
+              <div><span>Assignee</span><strong><span className="avatar tiny">MC</span>Marina Costa</strong></div>
+              {selectedTask.app !== 'none' && <div><span>App</span><strong><Blocks size={15} />{appLabels[selectedTask.app]}</strong></div>}
             </div>
 
             <section className="drawer-checklist">
-              <div><h3>Lista de conclusão</h3><span>{selectedTask.checklist.filter((item) => item.done).length}/{selectedTask.checklist.length}</span></div>
+              <div><h3>Completion checklist</h3><span>{selectedTask.checklist.filter((item) => item.done).length}/{selectedTask.checklist.length}</span></div>
               {selectedTask.checklist.length ? selectedTask.checklist.map((item, index) => (
                 <button
                   key={item.label}
@@ -1694,12 +1693,12 @@ export default function MappiPortfolio() {
                   {item.done ? <CheckCircle2 size={18} /> : <Circle size={18} />}
                   <span>{item.label}</span>
                 </button>
-              )) : <p className="no-checklist">Esta etapa não exige verificações adicionais.</p>}
+              )) : <p className="no-checklist">This step has no additional checks.</p>}
             </section>
 
             <div className="drawer-automation">
               <Zap size={16} />
-              <p><strong>Automação do mapa</strong><span>Ao concluir, o Mappi segue a ligação publicada e cria a próxima tarefa — ou encerra a execução.</span></p>
+              <p><strong>Map automation</strong><span>When completed, Mappi follows the published connection and creates the next task — or ends the run.</span></p>
             </div>
 
             <footer className="drawer-footer">
@@ -1707,36 +1706,36 @@ export default function MappiPortfolio() {
                 <button className="primary-button full" onClick={startSelectedTask}>
                   <Play size={16} fill="currentColor" />
                   {selectedTask.kind === 'approval'
-                    ? 'Preparar aprovação'
+                    ? 'Prepare approval'
                     : selectedTask.kind === 'decision'
-                      ? 'Analisar decisão'
-                      : 'Iniciar tarefa'}
+                      ? 'Review decision'
+                      : 'Start task'}
                 </button>
               )}
               {selectedTask.status === 'doing' && (
                 <button className="primary-button full" onClick={reviewSelectedTask} disabled={!canSendToReview(selectedTask)}>
                   <ShieldCheck size={16} />
-                  {selectedTask.kind === 'approval' ? 'Solicitar aprovação' : 'Enviar para revisão'}
+                  {selectedTask.kind === 'approval' ? 'Request approval' : 'Send for review'}
                 </button>
               )}
               {selectedTask.status === 'review' && selectedTask.kind !== 'decision' && (
                 <button className="primary-button full" onClick={() => finishSelectedTask('approve')}>
                   <Check size={16} />
-                  {selectedTask.kind === 'approval' ? 'Aprovar e avançar' : 'Concluir e avançar'}
+                  {selectedTask.kind === 'approval' ? 'Approve and continue' : 'Complete and continue'}
                 </button>
               )}
               {selectedTask.status === 'review' && selectedTask.kind === 'decision' && selectedTaskHasAdjustment && (
                 <div className="decision-actions">
-                  <button className="secondary-button" onClick={() => finishSelectedTask('adjust')}>Precisa ajustar</button>
-                  <button className="primary-button" onClick={() => finishSelectedTask('approve')}>Pode seguir <ArrowRight size={15} /></button>
+                  <button className="secondary-button" onClick={() => finishSelectedTask('adjust')}>Needs changes</button>
+                  <button className="primary-button" onClick={() => finishSelectedTask('approve')}>Continue <ArrowRight size={15} /></button>
                 </div>
               )}
               {selectedTask.status === 'review' && selectedTask.kind === 'decision' && !selectedTaskHasAdjustment && (
                 <button className="primary-button full" onClick={() => finishSelectedTask('approve')}>
-                  Pode seguir <ArrowRight size={15} />
+                  Continue <ArrowRight size={15} />
                 </button>
               )}
-              {selectedTask.status === 'done' && <div className="completed-message"><CheckCircle2 size={18} /><span>Etapa concluída</span></div>}
+              {selectedTask.status === 'done' && <div className="completed-message"><CheckCircle2 size={18} /><span>Step complete</span></div>}
             </footer>
           </aside>
         </div>
@@ -1759,8 +1758,8 @@ export default function MappiPortfolio() {
       );
       return date;
     });
-    const weekdays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
-    const monthLabel = new Intl.DateTimeFormat('pt-BR', {
+    const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const monthLabel = new Intl.DateTimeFormat('en-US', {
       month: 'long',
       year: 'numeric',
     }).format(focusDate);
@@ -1768,15 +1767,15 @@ export default function MappiPortfolio() {
     return (
       <div className="product-page agenda-page">
         <SectionHeader
-          eyebrow="Prazos"
-          title="Agenda"
-          description="As mesmas tarefas, organizadas pelo momento em que precisam acontecer."
-          action={<button className="secondary-button" onClick={() => navigate('tasks')}><ListTodo size={16} />Ver quadro</button>}
+          eyebrow="Deadlines"
+          title="Calendar"
+          description="The same tasks, organized by when they need to happen."
+          action={<button className="secondary-button" onClick={() => navigate('tasks')}><ListTodo size={16} />View board</button>}
         />
         <section className="calendar-shell">
           <header className="calendar-toolbar">
             <div><h2>{monthLabel.charAt(0).toUpperCase() + monthLabel.slice(1)}</h2></div>
-            <span className="today-pill">Em foco, {focusDate.getDate()}</span>
+            <span className="today-pill">Selected, {focusDate.getDate()}</span>
           </header>
           <div className="calendar-weekdays">{weekdays.map((day) => <span key={day}>{day}</span>)}</div>
           <div className="calendar-grid">
@@ -1809,22 +1808,22 @@ export default function MappiPortfolio() {
     items: Array<{ id: DemoApp; name: string; description: string; icon: LucideIcon; color: string }>;
   }> = [
     {
-      group: 'Trabalho',
+      group: 'Work',
       items: [
-        { id: 'forms', name: 'Formulários', description: 'Colete dados antes ou durante uma etapa.', icon: FileText, color: '#3977c5' },
-        { id: 'files', name: 'Arquivos', description: 'Anexe e organize documentos do processo.', icon: Folder, color: '#c37732' },
+        { id: 'forms', name: 'Forms', description: 'Collect data before or during a step.', icon: FileText, color: '#3977c5' },
+        { id: 'files', name: 'Files', description: 'Attach and organize process documents.', icon: Folder, color: '#c37732' },
       ],
     },
     {
-      group: 'Comunicação',
+      group: 'Communication',
       items: [
-        { id: 'messages', name: 'Mensagens', description: 'Avise responsáveis e registre retornos.', icon: MessageSquare, color: '#8f6cb4' },
+        { id: 'messages', name: 'Messages', description: 'Notify owners and record responses.', icon: MessageSquare, color: '#8f6cb4' },
       ],
     },
     {
-      group: 'Automação',
+      group: 'Automation',
       items: [
-        { id: 'none', name: 'Webhook', description: 'Envie eventos para ferramentas externas.', icon: Webhook, color: '#60656b' },
+        { id: 'none', name: 'Webhook', description: 'Send events to external tools.', icon: Webhook, color: '#60656b' },
       ],
     },
   ];
@@ -1832,9 +1831,9 @@ export default function MappiPortfolio() {
   const renderApps = () => (
     <div className="product-page apps-page">
       <SectionHeader
-        eyebrow="Conexões"
-        title="Aplicativos"
-        description="Adicione recursos aos mapas sem transformar a configuração em um projeto técnico."
+        eyebrow="Connections"
+        title="Apps"
+        description="Add capabilities to maps without turning setup into a technical project."
       />
       <section className="apps-hero">
         <div className="apps-orbit" aria-hidden="true">
@@ -1843,11 +1842,11 @@ export default function MappiPortfolio() {
           <span className="orbit-item two"><Folder size={18} /></span>
           <span className="orbit-item three"><MessageSquare size={18} /></span>
         </div>
-        <div><span className="demo-badge">Ambiente demonstrativo</span><h2>Seu processo continua no Mappi.<br />Os aplicativos entram quando ajudam.</h2><p>As conexões abaixo são simulações locais para mostrar a experiência do produto sem acessar serviços reais.</p></div>
+        <div><span className="demo-badge">Demo environment</span><h2>Your process stays in Mappi.<br />Apps join when they help.</h2><p>The connections below are local simulations that show the product experience without accessing real services.</p></div>
       </section>
       {integrationGroups.map((group) => (
         <section className="app-group" key={group.group}>
-          <div className="app-group-heading"><h2>{group.group}</h2><span>{group.items.length} {group.items.length === 1 ? 'aplicativo' : 'aplicativos'}</span></div>
+          <div className="app-group-heading"><h2>{group.group}</h2><span>{group.items.length} {group.items.length === 1 ? 'app' : 'apps'}</span></div>
           <div className="integration-grid">
             {group.items.map((integration) => {
               const connected = integration.id !== 'none' && connectedApps.includes(integration.id);
@@ -1860,7 +1859,7 @@ export default function MappiPortfolio() {
                     className={connected ? 'connection-button is-connected' : 'connection-button'}
                     onClick={() => {
                       if (integration.id === 'none') {
-                        notify('Webhook disponível no plano completo.');
+                        notify('Webhook is available in the full plan.');
                         return;
                       }
                       setConnectedApps((current) =>
@@ -1868,7 +1867,7 @@ export default function MappiPortfolio() {
                       );
                     }}
                   >
-                    {connected ? <><Check size={14} />Conectado</> : 'Conectar'}
+                    {connected ? <><Check size={14} />Connected</> : 'Connect'}
                   </button>
                 </article>
               );
@@ -1886,15 +1885,15 @@ export default function MappiPortfolio() {
       <aside className="sidebar">
         <div className="sidebar-brand">
           <AppMark />
-          <span><strong>Mappi</strong><small>Trabalho conectado</small></span>
+          <span><strong>Mappi</strong><small>Connected work</small></span>
         </div>
 
-        <div className="sector-picker" aria-label="Espaço de trabalho Operações">
+        <div className="sector-picker" aria-label="Operations workspace">
           <span className="sector-symbol">O</span>
-          <span><small>Espaço de trabalho</small><strong>Operações</strong></span>
+          <span><small>Workspace</small><strong>Operations</strong></span>
         </div>
 
-        <nav className="sidebar-nav" aria-label="Navegação principal">
+        <nav className="sidebar-nav" aria-label="Main navigation">
           {navItems.map((item) => {
             const Icon = item.icon;
             return (
@@ -1908,28 +1907,28 @@ export default function MappiPortfolio() {
         </nav>
 
         <div className="sidebar-info">
-          <div><Sparkles size={16} /><span><strong>Demo interativa</strong><small>Dados apenas neste navegador</small></span></div>
-          <button onClick={() => setAboutOpen(true)}>Sobre esta versão</button>
+          <div><Sparkles size={16} /><span><strong>Interactive demo</strong><small>Data stays in this browser</small></span></div>
+          <button onClick={() => setAboutOpen(true)}>About this version</button>
         </div>
 
         <div className="sidebar-bottom">
           <div className="profile-wrap" onPointerDown={(event) => event.stopPropagation()}>
             <button className="profile-button" onClick={() => setProfileOpen((open) => !open)}>
               <span className="avatar">MC</span>
-              <span><strong>Marina Costa</strong><small>Administração</small></span>
+              <span><strong>Marina Costa</strong><small>Administration</small></span>
               <ChevronDown size={15} />
             </button>
             {profileOpen && (
               <div className="profile-menu">
-                <button onClick={() => { setAboutOpen(true); setProfileOpen(false); }}><CircleUserRound size={16} />Sobre esta conta</button>
+                <button onClick={() => { setAboutOpen(true); setProfileOpen(false); }}><CircleUserRound size={16} />About this account</button>
                 <button
                   onClick={() => {
-                    if (window.confirm('Restaurar os dados sintéticos desta demonstração?')) {
+                    if (window.confirm('Restore the synthetic data in this demo?')) {
                       resetDemo();
                     }
                   }}
                 >
-                  <RotateCcw size={16} />Restaurar demo
+                  <RotateCcw size={16} />Restore demo
                 </button>
               </div>
             )}
@@ -1940,7 +1939,7 @@ export default function MappiPortfolio() {
       <main className="app-main">
         <header className="mobile-topbar">
           <span className="mobile-brand"><AppMark compact /><strong>Mappi</strong></span>
-          <button className="avatar" onClick={() => setAboutOpen(true)} aria-label="Sobre a demonstração">MC</button>
+          <button className="avatar" onClick={() => setAboutOpen(true)} aria-label="About the demo">MC</button>
         </header>
         {view === 'home' && renderHome()}
         {view === 'maps' && (showEditor ? renderEditor() : renderMapLibrary())}
@@ -1952,16 +1951,16 @@ export default function MappiPortfolio() {
       {aboutOpen && (
         <div className="modal-backdrop" onMouseDown={(event) => event.target === event.currentTarget && setAboutOpen(false)}>
           <section className="about-modal" role="dialog" aria-modal="true" aria-labelledby="about-title">
-            <header><AppMark /><button className="icon-button subtle" onClick={() => setAboutOpen(false)} aria-label="Fechar"><X size={18} /></button></header>
-            <span className="demo-badge">Case público independente</span>
-            <h2 id="about-title">Uma demonstração segura do Mappi.</h2>
-            <p>Esta experiência foi reconstruída para apresentar o conceito do produto: mapas que geram tarefas, decisões, prazos e agenda.</p>
+            <header><AppMark /><button className="icon-button subtle" onClick={() => setAboutOpen(false)} aria-label="Close"><X size={18} /></button></header>
+            <span className="demo-badge">Independent public case study</span>
+            <h2 id="about-title">A safe, public Mappi demo.</h2>
+            <p>This experience was rebuilt to present the product concept: visual maps that generate tasks, decisions, deadlines, and schedules.</p>
             <ul>
-              <li><Check size={15} />Dados inteiramente sintéticos</li>
-              <li><Check size={15} />Execução local no navegador</li>
-              <li><Check size={15} />Sem código, rotas ou integrações de produção</li>
+              <li><Check size={15} />Entirely synthetic data</li>
+              <li><Check size={15} />Runs locally in the browser</li>
+              <li><Check size={15} />No production code, routes, or integrations</li>
             </ul>
-            <button className="primary-button full" onClick={() => setAboutOpen(false)}>Explorar a demonstração</button>
+            <button className="primary-button full" onClick={() => setAboutOpen(false)}>Explore the demo</button>
           </section>
         </div>
       )}

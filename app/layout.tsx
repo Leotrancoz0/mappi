@@ -6,24 +6,24 @@ const siteOrigin = configuredOrigin.startsWith('http') ? configuredOrigin : `htt
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteOrigin),
-  title: 'Mappi — mapas que criam trabalho',
-  description: 'Desenhe processos e transforme cada etapa em tarefas, decisões, prazos e agenda.',
+  title: 'Mappi — visual workflows that create work',
+  description: 'Design processes and turn every step into tasks, decisions, deadlines, and schedules.',
   openGraph: {
     type: 'website',
-    locale: 'pt_BR',
-    title: 'Mappi — mapas que criam trabalho',
-    description: 'Desenhe processos e transforme cada etapa em tarefas, decisões, prazos e agenda.',
+    locale: 'en_US',
+    title: 'Mappi — visual workflows that create work',
+    description: 'Design processes and turn every step into tasks, decisions, deadlines, and schedules.',
     images: [{
       url: '/og-mappi-v2.png',
       width: 1200,
       height: 630,
-      alt: 'Mappi: um mapa gerando tarefas e agenda',
+      alt: 'Mappi: a visual workflow generating tasks and a schedule',
     }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Mappi — mapas que criam trabalho',
-    description: 'Mapas, tarefas, decisões, agenda e aplicativos em uma experiência única.',
+    title: 'Mappi — visual workflows that create work',
+    description: 'Maps, tasks, decisions, schedules, and apps in one connected experience.',
     images: ['/og-mappi-v2.png'],
   },
 };
@@ -34,7 +34,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR">
+    <html lang="en">
       <body>{children}</body>
     </html>
   );
