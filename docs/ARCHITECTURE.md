@@ -1,31 +1,31 @@
-# Arquitetura conceitual
+# Conceptual architecture
 
-O Mappi separa o desenho do processo da sua execução sem fazer o usuário recadastrar o mesmo trabalho em módulos diferentes.
+Mappi separates process design from execution without asking the user to register the same work in multiple modules.
 
 ```text
-Mapa
-  └─ versão publicada
-       └─ execução
-            ├─ tarefa atual
+Map
+  └─ published snapshot
+       └─ run
+            ├─ current task
             │    ├─ checklist
-            │    ├─ prazo ──→ agenda
-            │    ├─ revisão
-            │    └─ decisão
-            └─ próxima tarefa
+            │    ├─ deadline ──→ calendar
+            │    ├─ review
+            │    └─ decision
+            └─ next task
 ```
 
-## Contrato do produto
+## Product contract
 
-1. O mapa define a ordem, o tipo e os requisitos de cada etapa.
-2. A publicação congela uma versão executável do mapa.
-3. Iniciar a versão cria somente a tarefa atual.
-4. A tarefa em andamento cumpre seus requisitos e passa por revisão.
-5. Aprovar a revisão registra o resultado e libera a etapa seguinte.
-6. Uma decisão pode continuar o caminho ou gerar um ajuste antes da retomada.
-7. A agenda lê os prazos das tarefas; ela não mantém uma cópia paralela.
+1. A map defines the order, type, and requirements of every step.
+2. Publishing freezes an executable snapshot of the map.
+3. Starting that snapshot creates only the current task.
+4. The task completes its requirements and passes through review.
+5. Approval records the outcome and releases the next connected step.
+6. A decision can continue the main path or route the run through an explicit adjustment branch.
+7. The calendar reads task deadlines; it does not maintain a parallel copy of the work.
 
-## Implementação desta demonstração
+## Demo implementation
 
-O motor funcional está isolado em `app/demo-engine.ts`. Ao iniciar uma execução, a tarefa guarda um snapshot sintético das etapas e conexões publicadas; edições posteriores do mapa não alteram o caminho já iniciado. A interface usa um canvas espacial para o desenho e estado React para a execução, persistindo mapas, posições, conexões e tarefas somente no `localStorage`, sob uma chave exclusiva. Não há API, banco de dados, autenticação, telemetria ou conexão externa.
+The functional engine is isolated in `app/demo-engine.ts`. When a run starts, its task stores a synthetic snapshot of the published steps and connections, so later edits to the map cannot change an execution already in progress. The interface uses a spatial canvas for design and React state for execution. Maps, positions, connections, and tasks persist only in `localStorage` under a dedicated key.
 
-Em um produto comercial, persistência, versionamento, autorização, auditoria e integrações seriam serviços próprios. Esses componentes não fazem parte do case público.
+There is no API, database, authentication, telemetry, or external connection. In a commercial product, persistence, versioning, authorization, auditability, and integrations would be separate services; those components are outside this public case study.
