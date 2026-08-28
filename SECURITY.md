@@ -1,7 +1,7 @@
-# Segurança
+# Security
 
-Esta demonstração é local e não envia dados para um servidor. Os mapas e as tarefas criados pelo visitante permanecem no armazenamento local do próprio navegador e podem ser removidos pelo comando **Restaurar demo**.
+This demonstration runs locally and does not send visitor data to a server. Maps and tasks created during a visit remain in the browser's local storage and can be removed with **Restore demo**.
 
-Não use dados pessoais, credenciais ou informações confidenciais ao testar o case.
+Do not enter personal data, credentials, or confidential information while testing the case study.
 
-Se você identificar uma vulnerabilidade, não publique detalhes exploráveis em uma issue. Entre em contato de forma privada com o responsável pelo repositório, descrevendo impacto, passos mínimos de reprodução e ambiente utilizado.
+If you identify a vulnerability, do not publish exploitable details in a public issue. Contact the repository owner privately with the impact, minimal reproduction steps, and the environment used.

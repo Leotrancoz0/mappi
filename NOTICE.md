@@ -1,9 +1,9 @@
-# Aviso de propriedade
+# Proprietary notice
 
-Copyright 2026 Leonardo Orlandini Trancozo. Todos os direitos reservados.
+Copyright 2026 Leonardo Orlandini Trancozo. All rights reserved.
 
-O Mappi, sua identidade, seus conceitos de produto e o código desta demonstração são proprietários. A disponibilidade pública deste repositório serve exclusivamente para apresentação e avaliação de portfólio; ela não concede licença para copiar, modificar, distribuir, sublicenciar, hospedar ou explorar comercialmente o material.
+Mappi, its identity, product concepts, and the code in this demonstration are proprietary. This repository is publicly available only for portfolio presentation and evaluation. Its publication does not grant a license to copy, modify, distribute, sublicense, host, or commercially exploit the material.
 
-Este case foi construído de forma independente, com dados sintéticos e integrações simuladas. Ele não contém código-fonte, credenciais, bases de dados, rotas privadas, configurações ou ativos de sistemas de terceiros ou ambientes de produção.
+This case study was built independently with synthetic data and simulated integrations. It contains no third-party or production source code, credentials, databases, private routes, configurations, or assets.
 
-As dependências de código aberto usadas para construir e executar a demonstração permanecem regidas por suas respectivas licenças. Entre elas estão `@xyflow/react` (MIT) e `lucide-react` (ISC). As versões exatas estão registradas em `package.json` e `package-lock.json`.
+Open-source dependencies used to build and run the demo remain governed by their respective licenses, including `@xyflow/react` (MIT) and `lucide-react` (ISC). Exact versions are recorded in `package.json` and `package-lock.json`.
